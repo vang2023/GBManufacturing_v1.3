@@ -15,7 +15,7 @@ namespace GBManufacturing
 		// constructors
 		public Manager() : base()
 		{
-			Password = "N/A";
+			Password = "none";
 		}
 
 		public Manager(string employeeID, string firstName, string lastName, string password)
@@ -24,6 +24,7 @@ namespace GBManufacturing
 			Password = password;
 		}
 
+		// properties
 		public string Password
 		{			
 			set

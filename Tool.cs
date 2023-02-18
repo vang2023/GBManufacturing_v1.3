@@ -6,11 +6,13 @@ namespace GBManufacturing
 	[Serializable]
 	public class Tool
 	{
+		// attributes
 		protected string toolID;
 		protected string toolManufacturer;
 		protected string toolDescription;
 		protected int toolQuantity;
 
+		// constructors
 		public Tool()
 		{
 			ToolID = "N/A";
@@ -25,14 +27,9 @@ namespace GBManufacturing
 			ToolManufacturer = toolManufacturer;
 			ToolDescription = toolDescription;
 			ToolQuantity = toolQuantity;
-		}
+		}		
 
-		public override string ToString()
-		{
-			return "Tool ID: " + ToolID + ", Tool Manufacturer: " + ToolManufacturer + ", Tool Description: " 
-				+ ToolDescription + ", Quantity: " + ToolQuantity.ToString();
-		}
-
+		// properties
 		[CsvColumn(Name = "Tool ID", FieldIndex = 1)]
 		public string ToolID
 		{
@@ -59,6 +56,13 @@ namespace GBManufacturing
 		{
 			get { return toolQuantity; }
 			set { toolQuantity = value; }
+		}
+
+		// behaviors
+		public override string ToString()
+		{
+			return "Tool ID: " + ToolID + ", " + ToolManufacturer + ", "
+				+ ToolDescription + ", " + ToolQuantity.ToString();
 		}
 	}
 }

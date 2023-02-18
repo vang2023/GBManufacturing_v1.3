@@ -8,75 +8,49 @@ namespace GBManufacturing
 {
 	public class ToolEvent
 	{
-		int transactionNumber;
-		protected Employee employeeID;
-		protected Tool toolID;
-		protected Tool toolManufacturer;
-		protected Tool toolDescription;
-		protected Tool toolQuantity;
+		// attributes
+		protected int transactionNumber;
+		protected Employee employee;
+		protected Tool tool;
 
+		// constructors
 		public ToolEvent() : base()
 		{
 			TransactionNumber = 0;
-			EmployeeID = new Employee();
-			ToolID = new Tool();
-			ToolManufacturer = new Tool();
-			ToolDescription = new Tool();
-			ToolQuantity = new Tool();
+			EmpObj = new Employee();
+			ToolObj = new Tool();
 		}
 
-		public ToolEvent(int transactionNumber, Employee employeeID, Tool toolID, 
-			Tool toolManufacturer, Tool toolDescription, Tool toolQuantity)
+		public ToolEvent(int transactionNumber, Employee employee, Tool tool)
 		{
 			TransactionNumber = transactionNumber;
-			EmployeeID = employeeID;
-			ToolID = toolID;
-			ToolManufacturer = toolManufacturer;
-			ToolDescription = toolDescription;
-			ToolQuantity = toolQuantity;
+			EmpObj = employee;
+			ToolObj = tool;
 		}
 
+		// properties
 		public int TransactionNumber
 		{
 			set { transactionNumber = value; }
 			get { return transactionNumber; }
 		}
 
-		public Employee EmployeeID
+		public Employee EmpObj
 		{
-			set { employeeID = value; }
-			get { return employeeID; }
+			set { this.employee = value; }
+			get { return employee; }
 		}
 
-		public Tool ToolID
+		public Tool ToolObj
 		{
-			set { toolID = value; }
-			get { return toolID; }
+			set { this.tool = value; }
+			get { return tool; }
 		}
 
-		public Tool ToolManufacturer
-		{
-			set { toolManufacturer = value; }
-			get { return toolManufacturer; }
-		}
-
-		public Tool ToolDescription
-		{
-			set { toolDescription = value; }
-			get { return toolDescription; }
-		}
-
-		public Tool ToolQuantity
-		{
-			set { toolQuantity = value; }
-			get { return toolQuantity; }
-		}
-
+		// behaviors
 		public override string ToString()
 		{
-			return "Transaction:" + transactionNumber.ToString() + ", Employee ID: " + EmployeeID + ", Tool ID: " + ToolID 
-				+ ", Tool Manufacturer: " + ToolManufacturer + ", Tool Description: " + ToolDescription 
-				+ ", Quantity: " + ToolQuantity.ToString();
+			return transactionNumber.ToString() + ", " + EmpObj + ", " + ToolObj;
 		}
 	}	
 }
