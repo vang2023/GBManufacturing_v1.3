@@ -27,51 +27,45 @@ namespace GBManufacturing
 
 		private void btnCheckout_Click(object sender, EventArgs e)
 		{
-			CheckoutForm checkoutInput = new CheckoutForm();     //new checkout form object
+			//listbox item is assigned to Tool object
+			Tool toolSelected = (Tool)listTools.SelectedItem;
 
-			using (checkoutInput)
+			//create instance of second form
+			CheckoutForm checkoutForm = new CheckoutForm();
+
+			//generate a random number for the TRANSACTION and output in textbox
+			Random randomNumber = new Random();
+			int newTransactionNumber = randomNumber.Next(100000, 1000000);
+
+
+			string empid = checkoutForm.txtEmployeeID.Text;     //convert then add the EMPLOYEE ID FROM THE EMPLOYEE TEXTBOX
+			string toolid = checkoutForm.ToolID;                //create the rest of the variables for checkout info
+			string manufacturer = checkoutForm.Manufacturer;
+			string description = checkoutForm.Description;
+			int quantity = checkoutForm.Quantity;
+
+			if (toolSelected != null)	//make sure item is selected
 			{
-				int itemSelected = listTools.SelectedIndex; //for list item selected
+				//send data from checkoutForm's textboxes to public ToolEvent attributes
+				checkoutForm.Transaction = newTransactionNumber;
+				checkoutForm.EmployeeID = empid;
+				checkoutForm.ToolID = toolSelected.ToolID;
+				checkoutForm.Manufacturer = toolSelected.ToolManufacturer;
+				checkoutForm.Description = toolSelected.ToolDescription;
+				checkoutForm.Quantity = toolSelected.ToolQuantity;
+			}
+			
+			//display the checkout form
+			DialogResult result = checkoutForm.ShowDialog();
 
-				if (itemSelected < 0)
-				{
-					MessageBox.Show("Please select a tool.");
-					return;
-				}
-
-				//Tool tselected = (Tool)listTools.Items[itemSelected];
-				//checkoutInput.txtToolID.Text = "fjaoi;uwoefij";
-				//checkoutInput.txtToolManufacturer.Text = "fjawoentmy,ufij";
-				//checkoutInput.txtToolDescription.Text = "fjaw4343yoefij";
-				//checkoutInput.txtQuantity.Text = "fjawoafwefwaefefij";
-
-				//checkoutInput.txtToolID.Text = toolSelected.ToolID;
-				//checkoutInput.txtToolManufacturer.Text = toolSelected.ToolManufacturer;
-				//checkoutInput.txtToolDescription.Text = toolSelected.ToolManufacturer;
-				//checkoutInput.txtQuantity.Text = toolSelected.ToolQuantity;
-
-				MessageBox.Show(checkoutInput.txtToolID.Text);
-
-				//-------------------READ tool_event.csv TO CHECK FOR DUPLICATE TRANSACTION NUMBERS-------------------//
-				//var transactionNumbers = new List<int>();
-
-				//string[] csvLines = System.IO.File.ReadAllLines(TOOLEVENTCSV);  //string array to read each line
-
-				//for (int i = 0; i < csvLines.Length; i++)
-				//{
-				//	string[] rowData = csvLines[i].Split(',');  //split the csv data by comma
-				//	if (rowData.Length == 5)                    //if the row is equal to 5 values, then add the data
-				//	{
-				//		int t = Convert.ToInt32(rowData[0]);    //convert to int before adding
-				//		transactionNumbers.Add(t);              //add transaction number to element
-				//	}
-				//}
-
-				
-
-
-				//write to tool event csv file
-				//File.AppendAllText(TOOLEVENTCSV, $"{newTransactionNumber},{empid},{toolid},{toolmanufacturer},{tooldescription},{qty}\n");
+			//
+			if (result == DialogResult.OK)
+			{
+				toolSelected.ToolID = checkoutForm.ToolID;
+				toolSelected.ToolDescription = checkoutForm.Manufacturer;
+				toolSelected.ToolManufacturer = checkoutForm.Description;
+				toolSelected.ToolQuantity = checkoutForm.Quantity;
+				newTransactionNumber = checkoutForm.Transaction;
 			}
 		}
 
@@ -122,25 +116,66 @@ namespace GBManufacturing
 			foreach (var line in lines)					//separate the values for each line
 			{
 				var values = line.Split(',');
-				int qty = Convert.ToInt32(values[3]);		//convert the quantity to int then assign to another variable
-				var tool = new Tool() { ToolID = values[0], ToolManufacturer = values[1],
-					ToolDescription = values[2], ToolQuantity = qty};
-				list.Add(tool);
+				int qty = Convert.ToInt32(values[3]);       //convert the quantity to int then assign to another variable
+				if (values.Length == 4)						//checks if each line has four values
+				{
+					var tool = new Tool()
+					{
+						ToolID = values[0],
+						ToolManufacturer = values[1],
+						ToolDescription = values[2],
+						ToolQuantity = qty
+					};
+					list.Add(tool);
+				} 
 			}
 
 			foreach (var item in list)					//print the file data
 			{
 				listTools.Items.Add(item);
 			}
-
 			listTools.Items.Add(_newline);
 		}
 
-		
-
-		public void AppendCSV(string filename)
+		public void ReadOrdersCSV(string filename)
 		{
+			var lines = File.ReadAllLines(TOOLEVENTFILECSV);    //variable to hold csv lines
+			var teventList = new List<ToolEvent>();				//create list of ToolEvent objects
+			var empList = new List<Employee>();                 //create list of Employee objects
+			var toolList = new List<Tool>();                    //create list of Tool objects
 
+
+			foreach (var line in lines)
+			{
+				var values = line.Split(',');
+				int trans = Convert.ToInt32(values[0]);
+				int qty = Convert.ToInt32(values[5]);
+				if (values.Length == 6)
+				{
+					var tevent = new ToolEvent()
+					{
+						TransactionNumber = trans,
+						EmployeeID = values[1]
+					};
+					//var emp = new Employee()
+					//{
+					//	EmployeeID = values[1]
+					//};
+					//var tool = new Tool()
+					//{
+					//	ToolID = values[2],
+					//	ToolManufacturer = values[3],
+					//	ToolDescription = values[4],
+					//	ToolQuantity = qty
+					//};
+				}
+			}
+
+			foreach (var item in teventList)                  //print the file data
+			{
+				listTools.Items.Add(item);
+			}
+			listTools.Items.Add(_newline);
 		}
 
 		private void btnClear_Click(object sender, EventArgs e)     //remove the checkmarks when the Clear button is clicked
@@ -153,67 +188,27 @@ namespace GBManufacturing
 		
 		private void listTools_DoubleClick(object sender, EventArgs e)
 		{
-			//listbox item is assigned to Tool object
-			Tool toolSelected = (Tool)listTools.SelectedItem;
-
-			//create instance of second form
-			CheckoutForm checkoutForm = new CheckoutForm();
-
-			//generate a random number for the TRANSACTION and output in textbox
-			Random randomNumber = new Random();                 
-			int newTransactionNumber = randomNumber.Next(100000, 1000000);
-
-			//convert then add the EMPLOYEE ID FROM THE EMP TEXTBOX
-			string empid = checkoutForm.txtEmployeeID.Text;
-
-			
-
-
-
-
-
-
-
-
-
-
-			//send data from checkoutForm's textboxes to public ToolEvent attributes
-			checkoutForm.Transaction = newTransactionNumber;
-			checkoutForm.EmployeeID = empid.ToString();
-			checkoutForm.ToolID = toolSelected.ToolID;
-			checkoutForm.Manufacturer = toolSelected.ToolManufacturer;
-			checkoutForm.Description= toolSelected.ToolDescription;
-			checkoutForm.Quantity = toolSelected.ToolQuantity;			
-
-			//display the checkout form
-			DialogResult result = checkoutForm.ShowDialog();
-
-			//
-			if (result == DialogResult.OK)
-			{
-				toolSelected.ToolID = checkoutForm.ToolID;
-				toolSelected.ToolDescription = checkoutForm.Manufacturer;
-				toolSelected.ToolManufacturer = checkoutForm.Description;
-				toolSelected.ToolQuantity = checkoutForm.Quantity;
-				newTransactionNumber = checkoutForm.Transaction;
-			}
-
-			//string toolid = checkoutForm.ToolID;                //create strings for employee ID and tool info
-			//string manufacturer = checkoutForm.Manufacturer;
-			//string description = checkoutForm.Description;
-			//int quantity = checkoutForm.Quantity;
-
-			//ToolEvent toolEvent = new ToolEvent(newTransactionNumber, empid, toolid, manufacturer, description, quantity);
+			btnCheckout_Click(sender, e);
 		}
 
 		private void btnSort_Click(object sender, EventArgs e)
 		{
-
+			
 		}
 
 		private void btnExit_Click(object sender, EventArgs e)
 		{
 			Application.Exit();
+		}
+
+		private void btnViewOrders_Click(object sender, EventArgs e)
+		{
+			//ReadOrdersCSV(TOOLEVENTFILECSV);
+		}
+
+		public void VerifyEmployeeID(string employeeID)
+		{
+			
 		}
 	}
 }

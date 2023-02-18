@@ -14,6 +14,7 @@ namespace GBManufacturing
 	public partial class CheckoutForm : Form
 	{
 		const string EMPLOYEEFILECSV = "employee_data.csv";
+		const string TOOLEVENTFILECSV = "tool_event.csv";
 
 		//create attributes to go between forms
 		public int Transaction { get; set; }
@@ -37,23 +38,31 @@ namespace GBManufacturing
 			txtToolManufacturer.Text = Manufacturer;
 			txtToolDescription.Text = Description;
 			txtQuantity.Text = Convert.ToString(Quantity);
-		}
-		
+		}	
 
 		//Submit button saves data to tool_event.csv file
 		private void btnSubmit_Click(object sender, EventArgs e)
 		{
-			Transaction = Int32.Parse(txtTransaction.Text);
-			EmployeeID = txtEmployeeID.Text;
-			ToolID = txtToolID.Text;
-			Manufacturer = txtToolManufacturer.Text;
-			Description = txtToolDescription.Text;
-			Quantity = Int32.Parse(txtQuantity.Text);
+			//assign checkout form information to variables
+			int trans = Int32.Parse(txtTransaction.Text);
+			string empid = txtEmployeeID.Text;
+			string tid = txtToolID.Text;
+			string manufacturer = txtToolManufacturer.Text;
+			string description = txtToolDescription.Text;
+			int qty = Int32.Parse(txtQuantity.Text);
+
+			//write transaction data to tool event file
+			File.AppendAllText(TOOLEVENTFILECSV, $"{trans},{empid},{tid},{manufacturer},{description},{qty}\n");
+
+			//alternate method
+			//using (System.IO.StreamWriter file = new System.IO.StreamWriter(TOOLEVENTFILECSV, true))
+			//{
+			//	file.Write(trans + "," + empid + "," + tid + "," + manufacturer + ","
+			//		+ description + "," + description + "," + qty + '\n');
+			//}
 
 			//compare employee id to EMPLOYEE file
-			VerifyEmployeeID(EmployeeID);
-
-			//ToolEvent toolEvent = new ToolEvent(Transaction, EmployeeID, ToolID, Manufacturer, Description, Quantity);
+			//VerifyEmployeeID(empid);
 		}
 
 		private void btnCancel_Click(object sender, EventArgs e)
@@ -62,25 +71,24 @@ namespace GBManufacturing
 		}
 
 		//method to verify employee ID
-		public string VerifyEmployeeID(string employeeID)
-		{
-			var lines = File.ReadAllLines(EMPLOYEEFILECSV);    //variable to hold csv lines
-			var list = new List<Employee>();                //create list of Tool objects
+		//public void VerifyEmployeeID(string employeeID)
+		//{
+		//	var lines = File.ReadAllLines(EMPLOYEEFILECSV);    //variable to hold csv lines
+		//	var list = new List<Employee>();                //create list of Tool objects
 
-			foreach (var line in lines)                 //separate the values for each line
-			{
-				var values = line.Split(',');
-				string empid = values[0];       //convert the quantity to int then assign to another variable
-				if (employeeID != empid)
-				{
-					MessageBox.Show("Employee ID not found. Please re-enter:");
-					break;					
-				}
-				else
-				{
-					return employeeID;
-				}					
-			}
-		}
+		//	foreach (var line in lines)
+		//	{
+		//		var values = line.Split(',');
+		//		if (values.Length == 3)
+		//		{
+		//			var emp = new Employee()
+		//			{
+		//				EmployeeID = values[0],
+		//				FirstName = values[1],
+		//				LastName = values[2]
+		//			};					
+		//		}
+		//	}
+		//}
 	}
 }

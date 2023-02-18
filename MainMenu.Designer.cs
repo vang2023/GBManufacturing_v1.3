@@ -42,6 +42,7 @@ namespace GBManufacturing
 			this.btnClear = new System.Windows.Forms.Button();
 			this.btnSort = new System.Windows.Forms.Button();
 			this.btnExit = new System.Windows.Forms.Button();
+			this.btnViewOrders = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
 			// listTools
@@ -186,11 +187,23 @@ namespace GBManufacturing
 			this.btnExit.UseVisualStyleBackColor = true;
 			this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
 			// 
+			// btnViewOrders
+			// 
+			this.btnViewOrders.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.btnViewOrders.Location = new System.Drawing.Point(17, 218);
+			this.btnViewOrders.Name = "btnViewOrders";
+			this.btnViewOrders.Size = new System.Drawing.Size(120, 40);
+			this.btnViewOrders.TabIndex = 19;
+			this.btnViewOrders.Text = "View Orders";
+			this.btnViewOrders.UseVisualStyleBackColor = true;
+			this.btnViewOrders.Click += new System.EventHandler(this.btnViewOrders_Click);
+			// 
 			// MainMenu
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(1084, 621);
+			this.Controls.Add(this.btnViewOrders);
 			this.Controls.Add(this.btnExit);
 			this.Controls.Add(this.btnSort);
 			this.Controls.Add(this.btnClear);
@@ -226,6 +239,7 @@ namespace GBManufacturing
 		private System.Windows.Forms.Button btnClear;
 		private System.Windows.Forms.Button btnSort;
 		private System.Windows.Forms.Button btnExit;
+		private System.Windows.Forms.Button btnViewOrders;
 	}
 }
 

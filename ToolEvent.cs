@@ -9,11 +9,11 @@ namespace GBManufacturing
 	public class ToolEvent
 	{
 		int transactionNumber;
-		private Employee employeeID;
-		private Tool toolID;
-		private Tool toolManufacturer;
-		private Tool toolDescription;
-		private Tool toolQuantity;
+		protected Employee employeeID;
+		protected Tool toolID;
+		protected Tool toolManufacturer;
+		protected Tool toolDescription;
+		protected Tool toolQuantity;
 
 		public ToolEvent() : base()
 		{
@@ -74,8 +74,9 @@ namespace GBManufacturing
 
 		public override string ToString()
 		{
-			return "Employee ID: " + EmployeeID + ", Tool ID: " + ToolID + ", Tool Manufacturer: " + ToolManufacturer 
-				+ ", Tool Description: " + ToolDescription + ", Quantity: " + ToolQuantity.ToString();
+			return "Transaction:" + transactionNumber.ToString() + ", Employee ID: " + EmployeeID + ", Tool ID: " + ToolID 
+				+ ", Tool Manufacturer: " + ToolManufacturer + ", Tool Description: " + ToolDescription 
+				+ ", Quantity: " + ToolQuantity.ToString();
 		}
 	}	
 }

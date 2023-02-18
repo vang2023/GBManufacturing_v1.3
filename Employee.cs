@@ -17,8 +17,8 @@ namespace GBManufacturing
         // constructors
         public Employee()
         {
-            FirstName = "N/A";
-            LastName = "N/A";
+            FirstName = "PHIA";
+            LastName = "VANG";
             EmployeeID = "N/A";
         }
 
@@ -53,5 +53,10 @@ namespace GBManufacturing
         {
             return "Employee ID: " + employeeID + ", Name: " + firstName + " " + lastName;
         }
-    }
+
+		public static implicit operator Employee(string v)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }
